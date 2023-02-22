@@ -27,24 +27,24 @@ public class JpaMain {
 //            System.out.println("result: " + result.getUsername());
 
             //*************프로젝션
-            Member member = new Member();
-            member.setUsername("member1");
-            member.setAge(10);
-            em.persist(member);
-
-            em.flush();
-            em.clear();
+//            Member member = new Member();
+//            member.setUsername("member1");
+//            member.setAge(10);
+//            em.persist(member);
+//
+//            em.flush();
+//            em.clear();
 
             //엔티티 타입
-            List<Member> result = em.createQuery("select m from Member m", Member.class)
-                    .getResultList();
+//            List<Member> result = em.createQuery("select m from Member m", Member.class)
+//                    .getResultList();
 
             //임베디드 타입
-            em.createQuery("select o.address from Order o", Address.class)
-                    .getResultList();
+//            em.createQuery("select o.address from Order o", Address.class)
+//                    .getResultList();
 
             //스칼라 타입
-            Query query = em.createQuery("select m.username, m.age from Member m");
+//            Query query = em.createQuery("select m.username, m.age from Member m");
 //            List<Object[]> resultList = query.getResultList();
 
 //            Object resultObject = resultList.get(0);
@@ -54,17 +54,40 @@ public class JpaMain {
 //            System.out.println("username: " + resultArr[0]);
 //            System.out.println("age: " + resultArr[1]);
 
-            List<MemberDto> resultList = em.createQuery("select new jpql.MemberDto(m.username, m.age) from Member m", MemberDto.class)
-                    .getResultList();
+//            List<MemberDto> resultList = em.createQuery("select new jpql.MemberDto(m.username, m.age) from Member m", MemberDto.class)
+//                    .getResultList();
 
-            MemberDto memberDto = resultList.get(0)
+//            MemberDto memberDto = resultList.get(0)
 ;
-            System.out.println("memberDto: " + memberDto.getUsername());
-            System.out.println("memberDto: " + memberDto.getAge());
+//            System.out.println("memberDto: " + memberDto.getUsername());
+//            System.out.println("memberDto: " + memberDto.getAge());
 
 
-            Member findMember = result.get(0);
-            findMember.setAge(20);
+//            Member findMember = result.get(0);
+//            findMember.setAge(20);
+
+            //****************페이징
+//            for(int i = 0 ; i < 100; i++) {
+//                Member member = new Member();
+//                member.setUsername("member" + i);
+//                member.setAge(i);
+//                em.persist(member);
+//            }
+//
+//
+//            em.flush();
+//            em.clear();
+//
+//            List<Member> resultList = em.createQuery("select m from Member m order by m.age desc", Member.class)
+//                    .setFirstResult(1)
+//                    .setMaxResults(10)
+//                    .getResultList();
+//
+//            System.out.println("result.size: " + resultList.size());
+//            for(Member member1 : resultList) {
+//                System.out.println("member1: " + member1);
+//            }
+
 
             tx.commit();
         } catch(Exception e) {
