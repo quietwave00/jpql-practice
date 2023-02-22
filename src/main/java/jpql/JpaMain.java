@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.Collection;
 import java.util.List;
 
 public class JpaMain {
@@ -109,6 +110,24 @@ public class JpaMain {
 //                    .getResultList();
 
             //***************서브쿼리
+//            Team team = new Team();
+//            team.setName("teamA");
+//            em.persist(team);
+//
+//            Member member = new Member();
+//            member.setUsername("member1");
+//            member.setAge(10);
+//            member.setTeam(team);
+//            em.persist(member);
+//
+//            em.flush();
+//            em.clear();
+//
+//            String query = "select m from Member m where exists (select t from m.team t where t.name = 'TeamA')";
+//            List<Member> resultList = em.createQuery(query, Member.class)
+//                    .getResultList();
+
+            //****************경로표현식
             Team team = new Team();
             team.setName("teamA");
             em.persist(team);
@@ -119,12 +138,31 @@ public class JpaMain {
             member.setTeam(team);
             em.persist(member);
 
+            Member member2 = new Member();
+            member2.setUsername("member2");
+            member2.setAge(10);
+            member2.setTeam(team);
+            em.persist(member2);
+
             em.flush();
             em.clear();
 
-            String query = "select m from Member m where exists (select t from m.team t where t.name = 'TeamA')";
-            List<Member> resultList = em.createQuery(query, Member.class)
+//            String query = "select m.username From Member m"; //상태필드. username에서 추가적인 탐색 블가
+//            String query = "select m.team from Member m"; //단일값 필드
+            String query = "select t.members from Team t"; //컬렉션 값 필드
+//            String query = "select m.username from Team t join t.members m"; //컬렉션 값에서 추가탐색을 원한다면?
+
+            Collection resultList = em.createQuery(query, Collection.class)
                     .getResultList();
+            for(Object o : resultList) {
+                System.out.println("object: " + o);
+            }
+
+//            Integer sizeResult = em.createQuery(query, Integer.class)
+//                    .getSingleResult();
+//            System.out.println("size: " + sizeResult);
+
+
 
             tx.commit();
         } catch(Exception e) {
