@@ -128,39 +128,134 @@ public class JpaMain {
 //                    .getResultList();
 
             //****************경로표현식
-            Team team = new Team();
-            team.setName("teamA");
-            em.persist(team);
-
-            Member member = new Member();
-            member.setUsername("member1");
-            member.setAge(10);
-            member.setTeam(team);
-            em.persist(member);
-
-            Member member2 = new Member();
-            member2.setUsername("member2");
-            member2.setAge(10);
-            member2.setTeam(team);
-            em.persist(member2);
-
-            em.flush();
-            em.clear();
+//            Team team = new Team();
+//            team.setName("teamA");
+//            em.persist(team);
+//
+//            Member member = new Member();
+//            member.setUsername("member1");
+//            member.setAge(10);
+//            member.setTeam(team);
+//            em.persist(member);
+//
+//            Member member2 = new Member();
+//            member2.setUsername("member2");
+//            member2.setAge(10);
+//            member2.setTeam(team);
+//            em.persist(member2);
+//
+//            em.flush();
+//            em.clear();
 
 //            String query = "select m.username From Member m"; //상태필드. username에서 추가적인 탐색 블가
 //            String query = "select m.team from Member m"; //단일값 필드
-            String query = "select t.members from Team t"; //컬렉션 값 필드
+//            String query = "select t.members from Team t"; //컬렉션 값 필드
 //            String query = "select m.username from Team t join t.members m"; //컬렉션 값에서 추가탐색을 원한다면?
 
-            Collection resultList = em.createQuery(query, Collection.class)
-                    .getResultList();
-            for(Object o : resultList) {
-                System.out.println("object: " + o);
-            }
+//            Collection resultList = em.createQuery(query, Collection.class)
+//                    .getResultList();
+//            for(Object o : resultList) {
+//                System.out.println("object: " + o);
+//            }
 
 //            Integer sizeResult = em.createQuery(query, Integer.class)
 //                    .getSingleResult();
 //            System.out.println("size: " + sizeResult);
+
+        //************페치 조인
+            Team team1 = new Team();
+            team1.setName("TeamA");
+            em.persist(team1);
+
+            Team team2 = new Team();
+            team2.setName("TeamB");
+            em.persist(team2);
+
+
+            Member member1 = new Member();
+            member1.setUsername("Member1");
+            member1.setTeam(team1);
+            em.persist(member1);
+
+            Member member2 = new Member();
+            member2.setUsername("Member2");
+            member2.setTeam(team1);
+            em.persist(member2);
+
+            Member member3 = new Member();
+            member3.setUsername("Member3");
+            member3.setTeam(team2);
+            em.persist(member3);
+
+            em.flush();
+            em.clear();
+
+            //단순 조회
+//            String query = "select m from Member m";
+//            List<Member> result = em.createQuery(query, Member.class).getResultList();
+//
+//            for(Member member : result) {
+//                System.out.println("member: " + member.getUsername() + ", " + member.getTeam().getName());
+//            }
+
+            //페치 조인
+//            String query = "select m from Member m join fetch m.team";
+//            List<Member> result = em.createQuery(query, Member.class).getResultList();
+//
+//            for(Member member : result) {
+//                System.out.println("member: " + member.getUsername() + ", " + member.getTeam().getName());
+//            }
+
+            //컬렉션 페치조인
+//            String query = "select t from Team t join fetch t.members";
+//            List<Team> resultList = em.createQuery(query, Team.class).getResultList();
+//
+//            for(Team team : resultList) {
+//                System.out.println("team: " + team.getName() + ", members: " + team.getMembers().size());
+//                for(Member member : team.getMembers()) {
+//                    System.out.println("-> member: " + member);
+//                }
+//            }
+
+            //distinct
+//            String query = "select distinct t from Team t join fetch t.members";
+//            List<Team> resultList = em.createQuery(query, Team.class).getResultList();
+//
+//            for(Team team : resultList) {
+//                System.out.println("team: " + team.getName() + ", members: " + team.getMembers().size());
+//                for(Member member : team.getMembers()) {
+//                    System.out.println("-> member: " + member);
+//                }
+//            }
+
+            //join과 차이
+//            String query = "select t from Team t join fetch t.members";
+//            List<Team> resultList = em.createQuery(query, Team.class).getResultList();
+//
+//            System.out.println("resultSize: " + resultList.size());
+//
+//            for(Team team : resultList) {
+//                System.out.println("team: " + team.getName() + ", members: " + team.getMembers().size());
+//                for(Member member : team.getMembers()) {
+//                    System.out.println("-> member: " + member);
+//                }
+//            }
+
+            //컬렉션 join fetch 시 페이징 하는 방법(@BatchSize)
+            String query = "select t from Team t";
+            List<Team> resultList = em.createQuery(query, Team.class)
+                    .setFirstResult(0)
+                    .setMaxResults(2)
+                    .getResultList();
+
+            System.out.println("resultSize: " + resultList.size());
+
+            for(Team team : resultList) {
+                System.out.println("team: " + team.getName() + ", members: " + team.getMembers().size());
+                for(Member member : team.getMembers()) {
+                    System.out.println("-> member: " + member);
+                }
+            }
 
 
 
