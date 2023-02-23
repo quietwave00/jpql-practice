@@ -163,32 +163,32 @@ public class JpaMain {
 //            System.out.println("size: " + sizeResult);
 
         //************페치 조인
-            Team team1 = new Team();
-            team1.setName("TeamA");
-            em.persist(team1);
-
-            Team team2 = new Team();
-            team2.setName("TeamB");
-            em.persist(team2);
-
-
-            Member member1 = new Member();
-            member1.setUsername("Member1");
-            member1.setTeam(team1);
-            em.persist(member1);
-
-            Member member2 = new Member();
-            member2.setUsername("Member2");
-            member2.setTeam(team1);
-            em.persist(member2);
-
-            Member member3 = new Member();
-            member3.setUsername("Member3");
-            member3.setTeam(team2);
-            em.persist(member3);
-
-            em.flush();
-            em.clear();
+//            Team team1 = new Team();
+//            team1.setName("TeamA");
+//            em.persist(team1);
+//
+//            Team team2 = new Team();
+//            team2.setName("TeamB");
+//            em.persist(team2);
+//
+//
+//            Member member1 = new Member();
+//            member1.setUsername("Member1");
+//            member1.setTeam(team1);
+//            em.persist(member1);
+//
+//            Member member2 = new Member();
+//            member2.setUsername("Member2");
+//            member2.setTeam(team1);
+//            em.persist(member2);
+//
+//            Member member3 = new Member();
+//            member3.setUsername("Member3");
+//            member3.setTeam(team2);
+//            em.persist(member3);
+//
+//            em.flush();
+//            em.clear();
 
             //단순 조회
 //            String query = "select m from Member m";
@@ -242,20 +242,53 @@ public class JpaMain {
 //            }
 
             //컬렉션 join fetch 시 페이징 하는 방법(@BatchSize)
-            String query = "select t from Team t";
-            List<Team> resultList = em.createQuery(query, Team.class)
-                    .setFirstResult(0)
-                    .setMaxResults(2)
-                    .getResultList();
+//            String query = "select t from Team t";
+//            List<Team> resultList = em.createQuery(query, Team.class)
+//                    .setFirstResult(0)
+//                    .setMaxResults(2)
+//                    .getResultList();
+//
+//            System.out.println("resultSize: " + resultList.size());
+//
+//            for(Team team : resultList) {
+//                System.out.println("team: " + team.getName() + ", members: " + team.getMembers().size());
+//                for(Member member : team.getMembers()) {
+//                    System.out.println("-> member: " + member);
+//                }
+//            }
 
-            System.out.println("resultSize: " + resultList.size());
+            //****************Named쿼리
+            Team team1 = new Team();
+            team1.setName("TeamA");
+            em.persist(team1);
 
-            for(Team team : resultList) {
-                System.out.println("team: " + team.getName() + ", members: " + team.getMembers().size());
-                for(Member member : team.getMembers()) {
-                    System.out.println("-> member: " + member);
-                }
-            }
+            Team team2 = new Team();
+            team2.setName("TeamB");
+            em.persist(team2);
+
+
+            Member member1 = new Member();
+            member1.setUsername("Member1");
+            member1.setTeam(team1);
+            em.persist(member1);
+
+            Member member2 = new Member();
+            member2.setUsername("Member2");
+            member2.setTeam(team1);
+            em.persist(member2);
+
+            Member member3 = new Member();
+            member3.setUsername("Member3");
+            member3.setTeam(team2);
+            em.persist(member3);
+
+            em.flush();
+            em.clear();
+
+            em.createNamedQuery("Member.findByUsername", Member.class)
+                            .setParameter("username", "Member1")
+                            .getResultList();
+
 
 
 
