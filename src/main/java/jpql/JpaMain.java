@@ -258,6 +258,38 @@ public class JpaMain {
 //            }
 
             //****************Named쿼리
+//            Team team1 = new Team();
+//            team1.setName("TeamA");
+//            em.persist(team1);
+//
+//            Team team2 = new Team();
+//            team2.setName("TeamB");
+//            em.persist(team2);
+//
+//
+//            Member member1 = new Member();
+//            member1.setUsername("Member1");
+//            member1.setTeam(team1);
+//            em.persist(member1);
+//
+//            Member member2 = new Member();
+//            member2.setUsername("Member2");
+//            member2.setTeam(team1);
+//            em.persist(member2);
+//
+//            Member member3 = new Member();
+//            member3.setUsername("Member3");
+//            member3.setTeam(team2);
+//            em.persist(member3);
+//
+//            em.flush();
+//            em.clear();
+//
+//            em.createNamedQuery("Member.findByUsername", Member.class)
+//                            .setParameter("username", "Member1")
+//                            .getResultList();
+
+            //**************벌크연산
             Team team1 = new Team();
             team1.setName("TeamA");
             em.persist(team1);
@@ -282,12 +314,20 @@ public class JpaMain {
             member3.setTeam(team2);
             em.persist(member3);
 
-            em.flush();
+
+            int resultCount = em.createQuery("update Member m set m.age = 20")
+                            .executeUpdate();
+
             em.clear();
 
-            em.createNamedQuery("Member.findByUsername", Member.class)
-                            .setParameter("username", "Member1")
-                            .getResultList();
+            Member findMember = em.find(Member.class, member1.getId());
+            System.out.println("findMember1.age: " + findMember.getAge());
+            System.out.println("member2.age: " + member2.getAge());
+            System.out.println("member3.age: " + member3.getAge());
+
+
+            System.out.println("count: " + resultCount);
+
 
 
 
